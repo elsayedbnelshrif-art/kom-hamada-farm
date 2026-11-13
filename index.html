@@ -1,54 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#2f9be8">
 <title>مزرعة كوم حمادة</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&display=swap" rel="stylesheet">
 <style>
-/* Layout: full-screen 3D isometric farm canvas, HUD floats over the sky (top) and on a wooden tray (bottom). Single bright daytime look. */
+/* Layout: full-screen 3D isometric farm canvas, wooden HUD floats over the sky (top) and on a wooden tray (bottom).
+   Palette follows the promo art: deep blue sky, bright grass, red-brown soil, white fence, wood + gold + glossy green UI. */
 :root{
-  --sky:#9fdcf3; --cream:#fff8e1; --wood:#c99a3c; --woodDark:#8a6420;
-  --ink:#3b2a14; --clay:#b3541e; --leaf:#43a047; --leafDark:#2b7a30;
-  --orange:#f57c00; --orangeDark:#b85a00;
+  --sky:#2f9be8; --sky2:#9bdcf8; --cream:#fff6d8; --wood:#b9742f; --wood2:#8a4f1c; --woodDark:#5c3310;
+  --ink:#3b2410; --clay:#c0392b; --leaf:#3fb321; --leafDark:#1f7d12; --gold:#ffd84a; --goldDark:#c98f12;
   --font:'Cairo',Tahoma,'Segoe UI',sans-serif;
   color-scheme:light;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
-html,body{height:100%;overflow:hidden}
-body{background:var(--sky);color:var(--ink);font-family:var(--font)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:#1c6fb8;color:var(--ink);font-family:var(--font)}
 #app{position:relative;height:100%;max-width:560px;margin:0 auto;overflow:hidden;
-  background:linear-gradient(var(--sky),#d8f1fa 60%)}
+  background:linear-gradient(var(--sky),var(--sky2) 55%,#c9eefc)}
 #cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 .hud-top{position:absolute;top:0;left:0;right:0;padding:8px max(10px,env(safe-area-inset-right,0px)) 0 max(10px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:6px;pointer-events:none}
 .hud-top>*{pointer-events:auto}
 .bar{display:flex;gap:6px;align-items:center}
-.pill{background:var(--cream);border:2px solid var(--wood);border-radius:20px;padding:1px 10px;font-weight:900;font-size:15px;display:flex;align-items:center;gap:4px;box-shadow:0 2px 0 var(--woodDark);font-variant-numeric:tabular-nums}
-.xp{flex:1;height:16px;background:var(--cream);border:2px solid var(--wood);border-radius:10px;overflow:hidden}
-.xp>i{display:block;height:100%;background:linear-gradient(#ffd54f,#ffb300);width:0;transition:width .3s}
-.hajj{display:flex;gap:8px;align-items:center;background:rgba(255,253,243,.95);border:2px solid var(--wood);border-radius:14px;padding:5px 10px;font-size:13px;font-weight:700;min-height:50px;box-shadow:0 3px 0 rgba(138,100,32,.5)}
-.hajj .face{font-size:30px;line-height:1}
+.pill{background:linear-gradient(#c98743,var(--wood2));border:2px solid var(--woodDark);border-radius:20px;padding:1px 11px;font-weight:900;font-size:15px;color:#ffe98a;text-shadow:0 1px 0 #3b1d05;display:flex;align-items:center;gap:4px;box-shadow:0 3px 0 #3b1d05,inset 0 1px 0 rgba(255,255,255,.35);font-variant-numeric:tabular-nums}
+.xp{flex:1;height:18px;background:#5c3310;border:2px solid var(--woodDark);border-radius:10px;overflow:hidden;box-shadow:0 3px 0 #3b1d05;position:relative}
+.xp>i{display:block;height:100%;background:linear-gradient(#fff07a,#ffc21a 60%,#f09a00);width:0;transition:width .3s;border-radius:8px}
+.hajj{display:flex;gap:8px;align-items:center;background:linear-gradient(#fffbe8,var(--cream));border:3px solid var(--wood);border-radius:16px;padding:4px 8px;font-size:13px;font-weight:800;min-height:54px;box-shadow:0 3px 0 var(--woodDark)}
+.hajj .face{width:46px;height:46px;flex:0 0 46px;border-radius:50%;background:linear-gradient(#7fd0ff,#bfeaff);border:2px solid var(--wood);overflow:hidden}
+.hajj .face svg{width:100%;height:100%;display:block}
 .hajj b{color:var(--clay)}
-.hajj #msg{flex:1;min-width:0}
-.hajj button{font-family:inherit;font-weight:900;background:var(--leaf);color:#fff;border:0;border-radius:10px;padding:6px 10px;box-shadow:0 3px 0 var(--leafDark);opacity:.4;font-size:13px}
-.hajj button.on{opacity:1;animation:pulse 1s infinite alternate}
+.hajj #msg{flex:1;min-width:0;line-height:1.35}
+.gbtn,.btn,.play{font-family:inherit;font-weight:900;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.35);border:2px solid var(--gold);cursor:pointer;
+  background:linear-gradient(#8be84a,var(--leaf) 50%,var(--leafDark));box-shadow:0 4px 0 #14560b,inset 0 2px 0 rgba(255,255,255,.45)}
+.gbtn{border-radius:12px;padding:5px 10px;font-size:13px;opacity:.4}
+.gbtn.on{opacity:1;animation:pulse 1s infinite alternate}
 @keyframes pulse{to{transform:scale(1.08)}}
-.hud-bot{position:absolute;bottom:0;left:0;right:0;padding:8px max(10px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));
-  background:linear-gradient(#e3b866,#c9933f);border-top:4px solid var(--woodDark);border-radius:18px 18px 0 0;box-shadow:0 -3px 10px rgba(0,0,0,.15)}
-.seeds{display:flex;gap:6px;overflow-x:auto;padding-bottom:7px;scrollbar-width:none}
+.info{align-self:center;background:rgba(92,51,16,.82);color:#fff3c4;border-radius:12px;padding:1px 12px;font-size:11.5px;font-weight:800;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.hud-bot{position:absolute;bottom:0;left:0;right:0;padding:9px max(10px,env(safe-area-inset-right,0px)) calc(11px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));
+  background:repeating-linear-gradient(90deg,rgba(0,0,0,0) 0 58px,rgba(60,30,5,.28) 58px 60px),linear-gradient(#c98743,#9a5a22 70%,#7c4416);
+  border-top:4px solid var(--woodDark);border-radius:20px 20px 0 0;box-shadow:0 -4px 12px rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.3)}
+.seeds{display:flex;gap:6px;overflow-x:auto;padding:3px 0 8px;scrollbar-width:none}
 .seeds::-webkit-scrollbar{display:none}
-.seed{flex:0 0 auto;min-width:66px;text-align:center;background:var(--cream);border:3px solid #e8d6a6;border-radius:12px;padding:2px 4px;font-size:11px;font-weight:800;line-height:1.25;cursor:pointer}
+.seed{flex:0 0 auto;min-width:68px;text-align:center;background:linear-gradient(#fffbe8,var(--cream));border:3px solid #e2c98a;border-radius:13px;padding:2px 4px;font-size:11px;font-weight:800;line-height:1.25;cursor:pointer;box-shadow:0 2px 0 rgba(60,30,5,.5)}
 .seed .e{font-size:24px;display:block}
-.seed.sel{border-color:#e65100;background:#ffe2b0;transform:translateY(-3px)}
-.seed.lock{opacity:.5}
+.seed.sel{border-color:var(--gold);background:linear-gradient(#fff7b8,#ffe07a);transform:translateY(-3px);box-shadow:0 0 0 2px #e65100,0 4px 0 rgba(60,30,5,.5)}
+.seed.lock{opacity:.6;filter:grayscale(.5)}
 .row{display:flex;gap:8px}
-.btn{flex:1;font-family:inherit;font-weight:900;font-size:14px;border:0;border-radius:12px;padding:8px 6px;color:#fff;background:var(--orange);box-shadow:0 4px 0 var(--orangeDark);cursor:pointer}
-.btn.g{background:var(--leaf);box-shadow:0 4px 0 var(--leafDark)}
-.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
-.btn:focus-visible,.seed:focus-visible,.hajj button:focus-visible{outline:3px solid #1565c0;outline-offset:2px}
-.toast{position:absolute;top:130px;left:50%;transform:translateX(-50%);background:rgba(59,42,20,.92);color:#fff;padding:6px 14px;border-radius:16px;font-weight:800;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5;white-space:nowrap}
+.btn{flex:1;font-size:14px;border-radius:14px;padding:7px 6px}
+.btn.o{background:linear-gradient(#ffd45a,#f79a14 50%,#d87400);box-shadow:0 4px 0 #8a4a00,inset 0 2px 0 rgba(255,255,255,.45)}
+.btn:active,.play:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+.btn:focus-visible,.seed:focus-visible,.gbtn:focus-visible,.play:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.toast{position:absolute;top:150px;left:50%;transform:translateX(-50%);background:rgba(59,36,16,.93);color:#fff;padding:6px 14px;border-radius:16px;font-weight:800;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5;white-space:nowrap;border:2px solid var(--gold)}
 .toast.show{opacity:1}
 .pop{position:absolute;font-weight:900;font-size:18px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.55),0 0 6px rgba(0,0,0,.3);pointer-events:none;animation:up 1s forwards;z-index:4;transform:translate(-50%,-50%)}
 @keyframes up{to{transform:translate(-50%,-160%);opacity:0}}
-.hint{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:rgba(59,42,20,.6);pointer-events:none;white-space:nowrap}
-@media (prefers-reduced-motion:reduce){.hajj button.on{animation:none}.pop{animation-duration:.01s}}
-</style>
+.hint{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6);pointer-events:none;white-space:nowrap}
 
+/* wooden sign (title + level-up) */
+.sign{position:relative;background:linear-gradient(#b8763a,#8d5122 60%,#74401a);border:5px solid #5a2f10;border-radius:26px;padding:6px 30px 10px;text-align:center;
+  box-shadow:0 8px 0 #3b1d05,0 14px 24px rgba(0,0,0,.35),inset 0 3px 0 rgba(255,255,255,.3);line-height:1.15}
+.sign:before,.sign:after{content:"";position:absolute;top:-46px;width:9px;height:46px;background:repeating-linear-gradient(160deg,#9a6a35 0 5px,#6e4520 5px 10px);border-radius:4px}
+.sign:before{right:22%}.sign:after{left:22%}
+.sign .l1{display:block;font-size:44px;font-weight:900;color:#fff;-webkit-text-stroke:2px #4a240a;paint-order:stroke fill;text-shadow:0 4px 0 #4a240a}
+.sign .l2{display:block;font-size:50px;font-weight:900;color:var(--gold);-webkit-text-stroke:2px #4a240a;paint-order:stroke fill;text-shadow:0 4px 0 #4a240a}
+.ribbon{position:relative;background:linear-gradient(#e8402f,#b81f17);color:#fff;border-radius:6px;padding:5px 26px 7px;text-align:center;font-weight:900;margin-top:-6px;box-shadow:0 5px 0 #7c120d,0 8px 14px rgba(0,0,0,.3);text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.ribbon b{display:block;font-size:21px}
+.ribbon span{display:block;font-size:17px;color:var(--gold)}
+.ribbon i{font-style:normal;color:#8be84a;font-size:11px;vertical-align:middle;margin:0 4px}
+.splash{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 16px 24px;
+  background:linear-gradient(rgba(47,155,232,.78),rgba(120,205,250,.45) 45%,rgba(90,190,40,.5));transition:opacity .4s}
+.splash.hide{opacity:0;pointer-events:none}
+.hero{width:150px;height:150px;filter:drop-shadow(0 8px 10px rgba(0,0,0,.3))}
+.hero svg{width:100%;height:100%}
+.play{font-size:24px;border-radius:40px;padding:10px 44px;border-width:4px;box-shadow:0 6px 0 #14560b,0 12px 20px rgba(0,0,0,.3),inset 0 3px 0 rgba(255,255,255,.5);animation:pulse 1s infinite alternate}
+.lvlup{position:absolute;inset:0;z-index:15;display:none;align-items:center;justify-content:center;background:rgba(20,60,10,.45);padding:20px}
+.lvlup.show{display:flex}
+.lvlup .sign{padding:12px 26px 16px;animation:drop .45s cubic-bezier(.3,1.5,.5,1)}
+.lvlup .sign:before,.lvlup .sign:after{display:none}
+.lvlup .l1{font-size:22px}.lvlup .l2{font-size:36px}
+.lvlup p{margin:6px 0 0;color:#fff3c4;font-weight:800;font-size:14px;line-height:1.7}
+.lvlup small{display:block;margin-top:8px;color:#ffe98a;font-weight:800;opacity:.85}
+@keyframes drop{from{transform:translateY(-60px) scale(.7);opacity:0}}
+@media (max-height:620px){.hero{width:100px;height:100px}.sign .l1{font-size:34px}.sign .l2{font-size:40px}}
+@media (prefers-reduced-motion:reduce){.gbtn.on,.play{animation:none}.pop{animation-duration:.01s}.lvlup .sign{animation:none}}
+</style>
+</head>
+<body>
 <div id="app" dir="rtl">
   <canvas id="cv"></canvas>
   <div class="hud-top" id="hudTop">
@@ -57,17 +96,25 @@ body{background:var(--sky);color:var(--ink);font-family:var(--font)}
       <div class="xp"><i id="xpbar"></i></div>
       <div class="pill">⭐ <span id="lvl">1</span></div>
     </div>
-    <div class="hajj"><div class="face">👳</div><div id="msg">أهلاً بيك في كوم حمادة يا باشا!</div><button id="claim" type="button">استلم</button></div>
+    <div class="hajj"><div class="face" id="face"></div><div id="msg">أهلاً بيك في كوم حمادة يا باشا!</div><button id="claim" class="gbtn" type="button">استلم</button></div>
+    <div class="info" id="info"></div>
   </div>
   <div class="hint" id="hint">اسحب لتحريك المزرعة · قرّب بإصبعين</div>
   <div class="hud-bot" id="hudBot">
     <div class="seeds" id="seeds"></div>
     <div class="row">
-      <button class="btn g" id="harvestAll" type="button">🧺 احصد الكل</button>
-      <button class="btn" id="expand" type="button"></button>
+      <button class="btn" id="harvestAll" type="button">🧺 احصد الكل</button>
+      <button class="btn o" id="plantAll" type="button">🌱 ازرع الكل</button>
     </div>
   </div>
   <div class="toast" id="toast"></div>
+  <div class="lvlup" id="lvlup"><div class="sign"><span class="l1" id="luA"></span><span class="l2" id="luB"></span><p id="luC"></p><small>دوس للمتابعة</small></div></div>
+  <div class="splash" id="splash">
+    <div class="sign"><span class="l1">مزرعة</span><span class="l2">كوم حمادة</span></div>
+    <div class="ribbon"><b>ابني مزرعتك الخاصة</b><span>ازرع <i>●</i> احصد <i>●</i> اربح</span></div>
+    <div class="hero" id="hero"></div>
+    <button class="play" id="play" type="button">▶ العب الآن</button>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -79,154 +126,228 @@ const CROPS=[
  {id:'corn',n:'ذرة',e:'🌽',lv:2,cost:12,sell:24,t:40},
  {id:'tomato',n:'طماطم',e:'🍅',lv:3,cost:20,sell:40,t:70},
  {id:'bean',n:'فول',e:'🫘',lv:4,cost:30,sell:62,t:100},
- {id:'cane',n:'قصب سكر',e:'🎋',lv:5,cost:50,sell:105,t:180}
+ {id:'cane',n:'قصب سكر',e:'🎋',lv:5,cost:50,sell:105,t:180},
+ {id:'onion',n:'بصل',e:'🧅',lv:6,cost:70,sell:150,t:240},
+ {id:'potato',n:'بطاطس',e:'🥔',lv:7,cost:90,sell:195,t:300},
+ {id:'cucumber',n:'خيار',e:'🥒',lv:8,cost:115,sell:250,t:360},
+ {id:'eggplant',n:'باذنجان',e:'🍆',lv:9,cost:145,sell:320,t:450},
+ {id:'pepper',n:'فلفل',e:'🫑',lv:10,cost:180,sell:400,t:540},
+ {id:'melon',n:'بطيخ',e:'🍉',lv:12,cost:250,sell:570,t:720},
+ {id:'grape',n:'عنب',e:'🍇',lv:14,cost:340,sell:790,t:900},
+ {id:'orange',n:'برتقال',e:'🍊',lv:16,cost:450,sell:1060,t:1200},
+ {id:'mango',n:'مانجو',e:'🥭',lv:18,cost:600,sell:1430,t:1500},
+ {id:'cotton',n:'قطن',e:'☁️',lv:20,cost:800,sell:1930,t:1800},
+ {id:'dates',n:'بلح',e:'🌴',lv:22,cost:1050,sell:2560,t:2400},
+ {id:'rose',n:'ورد بلدي',e:'🌹',lv:25,cost:1400,sell:3450,t:3000},
+ {id:'berry',n:'فراولة',e:'🍓',lv:28,cost:1900,sell:4750,t:3600}
 ];
 const C=Object.fromEntries(CROPS.map(c=>[c.id,c]));
+const MAXLV=30, LAND_LV=13; // land grows on every level-up until LAND_LV (10x10)
+const TITLES=[[30,'عمدة كوم حمادة'],[25,'كبير الناحية'],[20,'صاحب عزبة'],[15,'شيخ الفلاحين'],[10,'معلّم الغيط'],[5,'فلاح شاطر'],[1,'فلاح جديد']];
+const titleOf=l=>TITLES.find(t=>l>=t[0])[1];
+const landFor=l=>{const e=Math.min(l,LAND_LV)-1;return{w:4+Math.ceil(e/2),h:4+Math.floor(e/2)}};
+const need=l=>Math.round(30*Math.pow(l,1.5)+(l>5?8*Math.pow(l-5,3):0));
+const ft=t=>t<60?t+'ث':t<3600?Math.round(t/60)+'د':Math.round(t/360)/10+'س';
 const KEY='komHamadaFarm1';
-let S;
-function fresh(){return{coins:30,xp:0,lv:1,size:4,plots:Array(16).fill(null),sel:'wheat',mission:null,last:Date.now()}}
-function load(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);if(d&&d.plots)return d}}catch(e){}return fresh()}
+let S,landDirty=false;
+function fresh(){return{coins:30,xp:0,lv:1,w:4,h:4,plots:Array(16).fill(null),sel:'wheat',mission:null,last:Date.now()}}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);if(d&&Array.isArray(d.plots)){
+   if(d.size&&!d.w){d.w=d.h=d.size;delete d.size} // older saves used a square "size"
+   if(!d.w||!d.h||d.plots.length!==d.w*d.h)return fresh();
+   d.lv=Math.max(1,Math.min(MAXLV,d.lv|0));if(!C[d.sel])d.sel='wheat';d.plots=d.plots.map(p=>p&&C[p.c]?p:null);return d}}}catch(e){}return fresh()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-S=load();
-const need=l=>Math.round(30*Math.pow(l,1.5));
+function ensureLand(){const t=landFor(S.lv),nw=Math.max(S.w,t.w),nh=Math.max(S.h,t.h);if(nw===S.w&&nh===S.h)return false;
+ const np=Array(nw*nh).fill(null);for(let y=0;y<S.h;y++)for(let x=0;x<S.w;x++)np[y*nw+x]=S.plots[y*S.w+x];S.plots=np;S.w=nw;S.h=nh;return true}
+S=load();ensureLand();
 const $=id=>document.getElementById(id);
+const HAJJ='<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M6 100Q8 74 50 70Q92 74 94 100Z" fill="#6f7480"/><path d="M28 73Q50 90 72 73L78 100H64L50 86 36 100H22Z" fill="#efe3c2"/><circle cx="25" cy="52" r="6" fill="#dc9a6c"/><circle cx="75" cy="52" r="6" fill="#dc9a6c"/><circle cx="50" cy="50" r="25" fill="#eab183"/><path d="M22 36Q18 8 50 8Q82 8 78 36Q64 26 50 28Q36 26 22 36Z" fill="#f6f3ec"/><path d="M26 30Q48 14 74 24M30 20Q50 10 70 16" fill="none" stroke="#d6d0c2" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="40" cy="46" rx="5" ry="6" fill="#fff"/><ellipse cx="60" cy="46" rx="5" ry="6" fill="#fff"/><circle cx="41" cy="47" r="3" fill="#2a1a0c"/><circle cx="61" cy="47" r="3" fill="#2a1a0c"/><path d="M33 38Q40 33 46 38M54 38Q60 33 67 38" fill="none" stroke="#3b2416" stroke-width="3" stroke-linecap="round"/><ellipse cx="50" cy="55" rx="6" ry="5" fill="#d98f62"/><path d="M40 66Q50 76 60 66Z" fill="#fff" stroke="#7a2e1e" stroke-width="1.5"/><path d="M27 62Q38 53 50 60Q62 53 73 62Q62 69 50 63Q38 69 27 62Z" fill="#3b2416"/></svg>';
+$('face').innerHTML=HAJJ;$('hero').innerHTML=HAJJ;
 
 /* ================= 3D SETUP ================= */
 const cv=$('cv'), app=$('app');
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
 renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.outputEncoding=THREE.sRGBEncoding;
 const scene=new THREE.Scene();
 const cam=new THREE.OrthographicCamera(-5,5,5,-5,0.1,200);
 const CAM_OFF=new THREE.Vector3(14,13,14);
 const target=new THREE.Vector3(0,0,0);
 let zoom=1;
 
-scene.add(new THREE.HemisphereLight(0xfff4d6,0x6b8f2e,0.8));
-const sun=new THREE.DirectionalLight(0xffffff,0.9);
+scene.add(new THREE.HemisphereLight(0xffffff,0x9fd060,0.78));
+const sun=new THREE.DirectionalLight(0xfff2d0,0.55);
 sun.position.set(9,16,5);sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048);
-Object.assign(sun.shadow.camera,{left:-16,right:16,top:16,bottom:-16,near:1,far:60});
+Object.assign(sun.shadow.camera,{left:-18,right:18,top:18,bottom:-18,near:1,far:70});
 sun.shadow.bias=-0.0008;
 scene.add(sun);scene.add(sun.target);
 
 const M={}; // material cache
 const mat=(c,opts)=>{const k=c+(opts?JSON.stringify(opts):'');return M[k]||(M[k]=new THREE.MeshLambertMaterial(Object.assign({color:c,flatShading:true},opts||{})))};
 function mesh(geo,color,x=0,y=0,z=0,shadow=true){const m=new THREE.Mesh(geo,mat(color));m.position.set(x,y,z);m.castShadow=shadow;m.receiveShadow=true;return m}
+const box=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
 
 /* ---- Ground ---- */
-const ground=new THREE.Mesh(new THREE.PlaneGeometry(90,90),mat(0x8cc84b));
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(120,120),mat(0x6cc22c));
 ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
-// grass patches for texture
 (function(){const g=new THREE.CircleGeometry(1,7);
- for(let i=0;i<70;i++){const r=6+Math.random()*16,a=Math.random()*Math.PI*2;
-  const p=new THREE.Mesh(g,mat(Math.random()<.5?0x7fbb40:0x9bd35a));p.rotation.x=-Math.PI/2;
+ for(let i=0;i<80;i++){const r=3+Math.random()*20,a=Math.random()*Math.PI*2;
+  const p=new THREE.Mesh(g,mat(Math.random()<.5?0x5fb424:0x86d93c));p.rotation.x=-Math.PI/2;
   const s=.4+Math.random()*1.2;p.scale.set(s,s*(.6+Math.random()*.6),1);p.position.set(Math.cos(a)*r,0.005,Math.sin(a)*r);p.receiveShadow=true;scene.add(p)}
- // tiny flowers
- const fg=new THREE.IcosahedronGeometry(0.06,0);
- for(let i=0;i<60;i++){const r=6.2+Math.random()*12,a=Math.random()*Math.PI*2;
-  scene.add(mesh(fg,[0xffffff,0xffeb3b,0xff8a80][i%3],Math.cos(a)*r,0.05,Math.sin(a)*r,false))}
 })();
 
-/* ---- Decor: the Egyptian village around the field ---- */
+/* ---- Decor: the Egyptian village around the field (re-positioned whenever the field grows) ---- */
 const decor=new THREE.Group();scene.add(decor);
-function palm(x,z,h=2.6){const g=new THREE.Group();
- for(let i=0;i<6;i++){const seg=mesh(new THREE.CylinderGeometry(.11,.14,h/6,6),i%2?0x8d6e45:0x7a5c38,0,h/12+i*h/6,0);seg.rotation.z=i*0.02;g.add(seg)}
- for(let i=0;i<7;i++){const leaf=mesh(new THREE.ConeGeometry(.2,1.5,4),0x3f9b3a,0,h,0);
-  leaf.geometry.translate(0,.75,0);leaf.rotation.set(1.15,i*Math.PI*2/7,0,'YXZ');leaf.scale.set(1,1,.35);g.add(leaf)}
+function palm(h=2.6){const g=new THREE.Group();
+ for(let i=0;i<6;i++){const seg=mesh(new THREE.CylinderGeometry(.11,.14,h/6,6),i%2?0x9a6b3c:0x7f5630,0,h/12+i*h/6,0);g.add(seg)}
+ for(let i=0;i<8;i++){const leaf=mesh(new THREE.ConeGeometry(.22,1.6,4),i%2?0x2fa32c:0x45bd35,0,h,0);
+  leaf.geometry.translate(0,.8,0);leaf.rotation.set(1.2,i*Math.PI/4,0,'YXZ');leaf.scale.set(1,1,.35);g.add(leaf)}
  for(let i=0;i<4;i++){g.add(mesh(new THREE.SphereGeometry(.09,6,5),0xb5541c,Math.cos(i*1.6)*.15,h-.12,Math.sin(i*1.6)*.15))}
- g.position.set(x,0,z);decor.add(g);return g}
-function house(x,z){const g=new THREE.Group();
- g.add(mesh(new THREE.BoxGeometry(3,1.7,2.2),0xe9c99a,0,.85,0));
- g.add(mesh(new THREE.BoxGeometry(3.2,.18,2.4),0xd2a86e,0,1.78,0));
- // rooftop: low wall + straw bundles (Egyptian flat roof)
- g.add(mesh(new THREE.BoxGeometry(1,.4,.8),0xe2c26c,.7,2.05,-.3));
- {const st=mesh(new THREE.CylinderGeometry(.18,.18,1.2,6),0xd9b44a,-.6,1.98,.4);st.rotation.z=Math.PI/2;g.add(st)}
- const door=mesh(new THREE.BoxGeometry(.6,1.05,.06),0x2f6fa8,.6,.53,1.11);g.add(door);
- g.add(mesh(new THREE.BoxGeometry(.45,.4,.06),0x2f6fa8,-.7,1.05,1.11));
- g.add(mesh(new THREE.BoxGeometry(.06,.4,.45),0x2f6fa8,1.51,1.05,0));
- g.position.set(x,0,z);g.rotation.y=Math.PI/4;decor.add(g)}
-function pigeonTower(x,z){const g=new THREE.Group();
- g.add(mesh(new THREE.CylinderGeometry(.5,.75,2.4,10),0xf2e6cf,0,1.2,0));
- g.add(mesh(new THREE.ConeGeometry(.55,.9,10),0xe3d3b4,0,2.85,0));
- for(let i=0;i<10;i++){const a=i/10*Math.PI*2,y=1.2+(i%3)*.45;g.add(mesh(new THREE.BoxGeometry(.1,.1,.05),0x5d4037,Math.cos(a)*.6,y,Math.sin(a)*.6,false))}
- g.position.set(x,0,z);decor.add(g)}
-function buffalo(x,z,ry){const g=new THREE.Group(),col=0x3a3a3f;
- g.add(mesh(new THREE.BoxGeometry(1.1,.55,.55),col,0,.65,0));
- g.add(mesh(new THREE.BoxGeometry(.4,.38,.38),col,.7,.78,0));
- g.add(mesh(new THREE.BoxGeometry(.18,.12,.3),0x55555c,.92,.7,0));
+ decor.add(g);return g}
+function house(){const g=new THREE.Group();
+ g.add(mesh(box(3,1.6,2.2),0xf6dd96,0,.8,0));
+ g.add(mesh(box(3.06,.3,2.26),0xc94a3a,0,.15,0,false));
+ g.add(mesh(box(3.2,.16,2.4),0xe2b662,0,1.68,0));
+ g.add(mesh(new THREE.SphereGeometry(.62,12,6,0,Math.PI*2,0,Math.PI/2),0xfafafa,-.6,1.76,-.2));
+ g.add(mesh(box(.6,.4,.5),0xecc63e,.75,1.96,-.3));g.add(mesh(box(.5,.35,.45),0xe0b830,.85,2.3,-.25));
+ g.add(mesh(box(.6,1.05,.06),0x1e88c9,.6,.53,1.11));
+ g.add(mesh(box(.45,.4,.06),0x1e88c9,-.7,1.0,1.11));
+ g.add(mesh(box(.06,.4,.45),0x1e88c9,1.51,1.0,0));
+ decor.add(g);return g}
+function stall(){const g=new THREE.Group();
+ g.add(mesh(box(1.9,.6,.8),0x9c5a2e,0,.3,0));
+ g.add(mesh(box(2,.08,.9),0xb9742f,0,.64,0));
+ [[-.9,-.35],[.9,-.35],[-.9,.35],[.9,.35]].forEach(([x,z])=>g.add(mesh(box(.08,1.5,.08),0x7a4a22,x,.75,z)));
+ const aw=new THREE.Group();[0x1e88e5,0xffffff,0xffd23a,0xe53935,0xffffff,0x1e88e5].forEach((c,i)=>aw.add(mesh(box(.36,.06,1.25),c,-.9+i*.36,0,0)));
+ aw.position.set(0,1.5,.15);aw.rotation.x=.3;g.add(aw);
+ [[-.5,0xe53935],[0,0xffc93c],[.5,0x8bc34a]].forEach(([x,c])=>g.add(mesh(box(.3,.18,.3),c,x,.77,.1,false)));
+ decor.add(g);return g}
+function pen(){const g=new THREE.Group(),W=3.6,Dp=2.6;g.userData.chickens=[];
+ g.add(mesh(box(W,.05,Dp),0xead49a,0,.025,0,false));
+ for(let x=-W/2;x<=W/2+.01;x+=.6){g.add(mesh(box(.09,.5,.09),0xb5482f,x,.25,-Dp/2));g.add(mesh(box(.09,.5,.09),0xb5482f,x,.25,Dp/2))}
+ for(let z=-Dp/2+.65;z<Dp/2-.1;z+=.65){g.add(mesh(box(.09,.5,.09),0xb5482f,-W/2,.25,z));g.add(mesh(box(.09,.5,.09),0xb5482f,W/2,.25,z))}
+ [.2,.38].forEach(y=>{g.add(mesh(box(W,.06,.05),0xffffff,0,y,-Dp/2));g.add(mesh(box(W,.06,.05),0xffffff,0,y,Dp/2));g.add(mesh(box(.05,.06,Dp),0xffffff,-W/2,y,0));g.add(mesh(box(.05,.06,Dp),0xffffff,W/2,y,0))});
+ g.add(mesh(box(1,.6,.8),0xd9b382,1.1,.3,-.7));const rf=mesh(box(1.2,.1,1),0x58b033,1.1,.68,-.7);rf.rotation.z=.15;g.add(rf);
+ [[-1,.3,.5],[-.2,-.5,2],[.4,.6,-1],[-1.1,-.6,3]].forEach(([x,z,ry])=>{const c=new THREE.Group();
+  const b=mesh(new THREE.SphereGeometry(.17,8,6),0xffffff,0,.2,0);b.scale.set(1.2,1,1);c.add(b);
+  c.add(mesh(new THREE.SphereGeometry(.1,8,6),0xffffff,.17,.36,0));c.add(mesh(box(.04,.08,.1),0xe53935,.17,.47,0,false));
+  const bk=mesh(new THREE.ConeGeometry(.035,.1,4),0xffb300,.29,.35,0,false);bk.rotation.z=-Math.PI/2;c.add(bk);
+  c.position.set(x,0,z);c.rotation.y=ry;g.add(c);g.userData.chickens.push(c)});
+ decor.add(g);return g}
+function pigeonTower(){const g=new THREE.Group();
+ g.add(mesh(new THREE.CylinderGeometry(.5,.78,2.5,10),0xf7edd2,0,1.25,0));
+ g.add(mesh(new THREE.ConeGeometry(.56,1,10),0xefe0bb,0,3,0));
+ for(let i=0;i<12;i++){const a=i/12*Math.PI*2,y=.9+(i%3)*.5;g.add(mesh(box(.1,.12,.1),0x5d4037,Math.cos(a)*(.68-(y-.9)*.1),y,Math.sin(a)*(.68-(y-.9)*.1),false))}
+ decor.add(g);return g}
+function pyramid(r,h){const g=mesh(new THREE.ConeGeometry(r,h,4),0xe6c47c,0,h/2,0);g.rotation.y=Math.PI/4;decor.add(g);return g}
+function buffalo(){const g=new THREE.Group(),col=0x3a3a3f;
+ g.add(mesh(box(1.1,.55,.55),col,0,.65,0));
+ g.add(mesh(box(.4,.38,.38),col,.7,.78,0));
+ g.add(mesh(box(.18,.12,.3),0x55555c,.92,.7,0));
  const h1=mesh(new THREE.TorusGeometry(.18,.04,4,8,Math.PI),0xd9cfb8,.7,1.02,.12);h1.rotation.y=Math.PI/2;g.add(h1);
  const h2=mesh(new THREE.TorusGeometry(.18,.04,4,8,Math.PI),0xd9cfb8,.7,1.02,-.12);h2.rotation.y=Math.PI/2;g.add(h2);
- [[.4,.18],[.4,-.18],[-.4,.18],[-.4,-.18]].forEach(([a,b])=>g.add(mesh(new THREE.BoxGeometry(.14,.4,.14),col,a,.2,b)));
- g.position.set(x,0,z);g.rotation.y=ry;decor.add(g);return g}
-function hay(x,z){const g=new THREE.Group();
- g.add(mesh(new THREE.CylinderGeometry(.75,.9,.9,9),0xe0b94f,0,.45,0));
- g.add(mesh(new THREE.ConeGeometry(.78,.7,9),0xd4ab40,0,1.25,0));g.position.set(x,0,z);decor.add(g)}
-function canal(){ // the irrigation canal (ترعة) with banks and a small bridge
- const w=mesh(new THREE.BoxGeometry(60,.05,1.5),0x4fb3e0,0,.02,0,false);w.material=new THREE.MeshLambertMaterial({color:0x4fb3e0});
- const g=new THREE.Group();g.add(w);
- g.add(mesh(new THREE.BoxGeometry(60,.12,.25),0xa8814f,0,.06,.85,false));
- g.add(mesh(new THREE.BoxGeometry(60,.12,.25),0xa8814f,0,.06,-.85,false));
- const br=mesh(new THREE.BoxGeometry(1.3,.14,2.2),0x8b5e34,2.5,.2,0);g.add(br);
- [-.6,.6].forEach(dx=>g.add(mesh(new THREE.BoxGeometry(.08,.35,2.2),0x6d4521,2.5+dx,.4,0)));
- // reeds
- for(let i=0;i<14;i++){const r=mesh(new THREE.ConeGeometry(.07,.7,4),0x6a9f2e,-12+i*1.9+Math.random(),.35,(i%2?1:-1)*1.0);decor.add(r);g.add(r)}
- g.position.set(0,0,-8.6);g.rotation.y=0;decor.add(g);canalWater=w}
-let canalWater;
-function waterwheel(x,z){const g=new THREE.Group();
- const wh=new THREE.Mesh(new THREE.TorusGeometry(.8,.09,6,14),mat(0x7a5530));wh.castShadow=true;
- for(let i=0;i<6;i++){const s=mesh(new THREE.BoxGeometry(.06,1.6,.08),0x6d4521);s.rotation.z=i*Math.PI/6;wh.add(s)}
- wh.position.y=.9;g.add(wh);g.userData.wheel=wh;
- g.add(mesh(new THREE.BoxGeometry(.12,1.1,.12),0x5d3d1e,0,.55,-.3));g.add(mesh(new THREE.BoxGeometry(.12,1.1,.12),0x5d3d1e,0,.55,.3));
- g.rotation.y=Math.PI/2;g.position.set(x,0,z);decor.add(g);return g}
+ [[.4,.18],[.4,-.18],[-.4,.18],[-.4,-.18]].forEach(([a,b])=>g.add(mesh(box(.14,.4,.14),col,a,.2,b)));
+ g.rotation.y=-.6;decor.add(g);return g}
+function hayBales(){const g=new THREE.Group();
+ [[0,.3,0],[.75,.3,.1],[.35,.9,.05],[.2,.3,.85]].forEach(([x,y,z],i)=>{g.add(mesh(box(.7,.6,.7),i%2?0xe6bd36:0xf0cc48,x,y,z));g.add(mesh(box(.72,.05,.72),0xc9a02a,x,y+.12,z,false))});
+ decor.add(g);return g}
+function rock(s){const g=mesh(new THREE.IcosahedronGeometry(.5,0),0xb9b6ae);g.scale.set(s*1.3,s*.7,s);g.position.y=s*.2;decor.add(g);return g}
+function scarecrow(){const g=new THREE.Group();
+ g.add(mesh(new THREE.ConeGeometry(.28,.75,8),0x2f7fd6,0,.45,0));g.add(mesh(new THREE.SphereGeometry(.13,8,6),0xf2d3a0,0,.92,0));
+ g.add(mesh(new THREE.ConeGeometry(.26,.22,8),0xf0c93c,0,1.08,0));g.add(mesh(box(.8,.06,.06),0x7a4a22,0,.68,0));
+ decor.add(g);return g}
+function canal(){const g=new THREE.Group();
+ const w=new THREE.Mesh(box(90,.05,2.8),new THREE.MeshLambertMaterial({color:0x2aa8ea}));w.position.y=.02;w.receiveShadow=true;g.add(w);g.userData.water=w;
+ g.add(mesh(box(90,.14,.3),0xb98a52,0,.07,1.55,false));g.add(mesh(box(90,.14,.3),0xb98a52,0,.07,-1.55,false));
+ for(let x=-24;x<=24;x+=1.5)g.add(mesh(box(.1,.5,.1),0xa0683a,x,.25,1.85,false));
+ g.add(mesh(box(50,.07,.06),0xb9742f,0,.4,1.85,false));g.add(mesh(box(50,.07,.06),0xb9742f,0,.22,1.85,false));
+ for(let i=0;i<16;i++)g.add(mesh(new THREE.ConeGeometry(.07,.7,4),0x4c9a2a,-15+i*2+Math.random(),.35,-1.75,false));
+ decor.add(g);return g}
+function waterwheel(){const g=new THREE.Group();
+ const wh=new THREE.Mesh(new THREE.TorusGeometry(.9,.1,6,14),mat(0x8a5530));wh.castShadow=true;
+ for(let i=0;i<6;i++){const s=mesh(box(.07,1.8,.09),0x6d4521);s.rotation.z=i*Math.PI/6;wh.add(s)}
+ wh.position.y=.85;g.add(wh);g.userData.wheel=wh;
+ g.add(mesh(box(.12,1.1,.12),0x5d3d1e,0,.55,-.32));g.add(mesh(box(.12,1.1,.12),0x5d3d1e,0,.55,.32));
+ decor.add(g);return g}
 function cloud(x,z){const g=new THREE.Group();
- [[0,0,0,.9],[.8,-.1,.1,.7],[-.8,-.15,0,.65],[.3,.35,0,.6]].forEach(([a,b,c,r])=>{const s=new THREE.Mesh(new THREE.IcosahedronGeometry(r,1),new THREE.MeshLambertMaterial({color:0xffffff,flatShading:true}));s.position.set(a,b,c);s.castShadow=true;g.add(s)});
- g.position.set(x,9,z);scene.add(g);return g}
+ [[0,0,0,.9],[.8,-.1,.1,.7],[-.8,-.15,0,.65],[.3,.35,0,.6]].forEach(([a,b,c,r])=>{const s=new THREE.Mesh(new THREE.IcosahedronGeometry(r,1),new THREE.MeshLambertMaterial({color:0xffffff,flatShading:true}));s.position.set(a,b,c);g.add(s)});
+ g.position.set(x,5,z);scene.add(g);return g}
 
-canal();
-house(-2.5,-12.2);pigeonTower(-7.5,-11.5);
-palm(-9.5,-6.5,3);palm(-10.5,-3,2.6);palm(6.5,-11.2,3.1);palm(10,-7,2.7);palm(-8,4.5,2.4);palm(9.5,5,2.9);
-const buff=buffalo(8.3,-2,-.6);hay(-8.5,0.5);hay(-9.6,1.8);
-const wheel=waterwheel(5.5,-8.6);
-const clouds=[cloud(-6,-4),cloud(6,3),cloud(0,-12)];
+const D={canal:canal(),house:house(),stall:stall(),pen:pen(),tower:pigeonTower(),wheel:waterwheel(),p1:pyramid(5.5,6),p2:pyramid(3.2,3.6),
+ buff:buffalo(),hay:hayBales(),scare:scarecrow(),palms:[3,2.6,3.1,2.7,2.4,2.9,3.2,2.8,3],rocks:[.9,.6,.8,.5],flowers:[]};
+D.palms=D.palms.map(h=>palm(h));D.rocks=D.rocks.map(s=>rock(s));
+D.sand=new THREE.Mesh(new THREE.PlaneGeometry(120,50),mat(0xeed79a));D.sand.rotation.x=-Math.PI/2;D.sand.receiveShadow=true;decor.add(D.sand);
+{const fg=new THREE.IcosahedronGeometry(0.07,0);for(let i=0;i<50;i++){const f=mesh(fg,[0xffffff,0xffeb3b,0xff8a80][i%3],0,.06,0,false);decor.add(f);D.flowers.push(f)}}
+const clouds=[cloud(-16,-24),cloud(-2,-30),cloud(10,-22)];
+function layoutDecor(hx,hz){ // hx,hz = half extents of the fenced field
+ const zb=-(hz+2.6), zc=zb-3.6;
+ D.stall.position.set(-6.6,0,zb+.4);D.house.position.set(-3,0,zb);D.pen.position.set(1.8,0,zb+.1);D.tower.position.set(5.4,0,zb-.2);
+ D.canal.position.set(0,0,zc);D.wheel.position.set(7.4,0,zc+1.1);
+ D.sand.position.set(0,.008,zc-1.7-25);D.p1.position.set(-5,3,zc-8);D.p2.position.set(-12.5,1.8,zc-6.5);
+ D.buff.position.set(hx+2.6,0,-.4);D.hay.position.set(-(hx+2.9),0,0);D.scare.position.set(1.6,0,hz+1.5);
+ [[-(hx+2.4),-hz-.2],[-(hx+3.8),hz*.3+2.6],[hx+3.2,-hz-1.2],[hx+4.4,1.4],[-(hx+3.6),hz+3.4],[-9.6,zb-.4],[8.6,zb+.6],[3,zc-3.2],[-12,zc-3]].forEach(([x,z],i)=>D.palms[i].position.set(x,0,z));
+ [[hx+1.7,hz+2.6],[-(hx+3.2),hz+.9],[hx+3.8,2],[-(hx+1.6),-hz-1.2]].forEach(([x,z],i)=>{D.rocks[i].position.x=x;D.rocks[i].position.z=z});
+ D.flowers.forEach(f=>{let x,z,n=0;do{x=(Math.random()*2-1)*(hx+7);z=zb+2+Math.random()*(hz-zb+5);n++}while(n<20&&Math.abs(x)<hx+.4&&Math.abs(z)<hz+.4);f.position.x=x;f.position.z=z});
+}
 
 /* ---- Field ---- */
 const STEP=1.16;
 const field=new THREE.Group();scene.add(field);
 let plotObjs=[];
 const G={ // shared geometries
- soil:new THREE.BoxGeometry(1,.16,1), furrow:new THREE.BoxGeometry(.86,.06,.17),
+ soil:box(1,.16,1), furrow:box(.86,.06,.17),
  sprout:new THREE.ConeGeometry(.05,.18,4), coin:new THREE.CylinderGeometry(.2,.2,.06,16),
  wheat:new THREE.CylinderGeometry(.13,.04,.5,6), wheatTop:new THREE.CylinderGeometry(.15,.13,.1,6),
  clover:new THREE.IcosahedronGeometry(.15,0), flower:new THREE.IcosahedronGeometry(.055,0),
- stalk:new THREE.CylinderGeometry(.035,.05,.95,5), leaf:new THREE.BoxGeometry(.04,.5,.12),
+ stalk:new THREE.CylinderGeometry(.035,.05,.95,5), leaf:box(.04,.5,.12),
  cob:new THREE.CylinderGeometry(.065,.05,.24,6), tassel:new THREE.ConeGeometry(.06,.2,4),
  bush:new THREE.IcosahedronGeometry(.22,0), stake:new THREE.CylinderGeometry(.015,.015,.6,4),
  fruit:new THREE.SphereGeometry(.075,7,6), smallBush:new THREE.IcosahedronGeometry(.16,0),
  pod:new THREE.CylinderGeometry(.03,.03,.2,5), cane:new THREE.CylinderGeometry(.04,.045,1.3,5),
- caneLeaf:new THREE.ConeGeometry(.08,.7,4)
+ caneLeaf:new THREE.ConeGeometry(.08,.7,4),
+ shoot:new THREE.ConeGeometry(.035,.42,4), bulb:new THREE.SphereGeometry(.08,7,6),
+ trunk:new THREE.CylinderGeometry(.06,.09,.5,6), crown:new THREE.IcosahedronGeometry(.38,0), melon:new THREE.SphereGeometry(.17,9,7)
 };
-const SOIL_DRY=0xa8723c, SOIL_WET=0x6e4526, FURROW_DRY=0x8a5a2c, FURROW_WET=0x553419;
+const SOIL_DRY=0xa9622f, SOIL_WET=0x6f381a, FURROW_DRY=0x8c4c22, FURROW_WET=0x552a12;
 const pos9=[],pos4=[[-.22,-.22],[.22,-.22],[-.22,.22],[.22,.22]],pos6=[];
 for(const z of[-.3,0,.3])for(const x of[-.3,0,.3])pos9.push([x,z]);
 for(const z of[-.28,.28])for(const x of[-.3,0,.3])pos6.push([x,z]);
+const FR4=[[.17,.35,0],[-.15,.42,.08],[0,.3,.18],[.05,.55,-.14]];
 
 function buildCrop(id,stage){ // stage 0 sprout, 1 growing, 2 ripe
  const g=new THREE.Group();const ripe=stage===2;
- if(stage===0){pos6.forEach(([x,z])=>g.add(mesh(G.sprout,0x7cc242,x,.17,z,false)));return g}
+ if(stage===0){pos6.forEach(([x,z])=>g.add(mesh(G.sprout,0x7cd242,x,.17,z,false)));return g}
  const k=ripe?1:.62;
- if(id==='wheat'){pos6.forEach(([x,z])=>{const c=ripe?0xe0b64a:0x8cc04a;g.add(mesh(G.wheat,c,x,.33,z));g.add(mesh(G.wheatTop,ripe?0xc99a2e:0x77a83c,x,.6,z,false))})}
- else if(id==='clover'){pos9.forEach(([x,z],i)=>{const m=mesh(G.clover,i%2?0x3e9e3e:0x4fb34a,x,.2,z);m.scale.y=.75;g.add(m);if(ripe&&i%2===0)g.add(mesh(G.flower,0xf2b8d8,x,.33,z,false))})}
- else if(id==='corn'){pos4.forEach(([x,z],i)=>{g.add(mesh(G.stalk,0x6aa84f,x,.55,z));
-   const l1=mesh(G.leaf,0x5c9e3c,x+.08,.5,z);l1.rotation.z=-.7;g.add(l1);const l2=mesh(G.leaf,0x5c9e3c,x-.08,.7,z);l2.rotation.z=.7;g.add(l2);
-   if(ripe){const cb=mesh(G.cob,0xf5c542,x+.07,.62,z+.04);cb.rotation.z=-.35;g.add(cb);g.add(mesh(G.tassel,0xc9a35a,x,1.1,z,false))}})}
- else if(id==='tomato'){pos4.forEach(([x,z])=>{g.add(mesh(G.stake,0x8b6a3e,x,.38,z,false));g.add(mesh(G.bush,0x3f8f3a,x,.4,z));
-   if(ripe)[[.17,.35,0],[-.15,.42,.08],[0,.3,.18],[.05,.55,-.14]].forEach(([a,b,c])=>g.add(mesh(G.fruit,0xe53935,x+a,b,z+c,false)))})}
- else if(id==='bean'){pos6.forEach(([x,z])=>{const b=mesh(G.smallBush,0x5d9b3a,x,.22,z);b.scale.y=1.2;g.add(b);
+ const bushes=(leaf,fruit,stake)=>pos4.forEach(([x,z])=>{if(stake)g.add(mesh(G.stake,0x8b6a3e,x,.38,z,false));g.add(mesh(G.bush,leaf,x,.4,z));
+   if(ripe)FR4.forEach(([a,b,c])=>g.add(mesh(G.fruit,fruit,x+a,b,z+c,false)))});
+ const tree=(leaf,fruit)=>{g.add(mesh(G.trunk,0x7a4a22,0,.25,0));g.add(mesh(G.crown,leaf,0,.78,0));
+   if(ripe)[[.33,.7,.1],[-.3,.8,.15],[.05,.62,.34],[-.1,1.05,.2],[.22,.98,-.2],[-.25,.6,-.2]].forEach(([a,b,c])=>g.add(mesh(G.fruit,fruit,a,b,c,false)))};
+ if(id==='wheat'){pos6.forEach(([x,z])=>{const c=ripe?0xf0c040:0x8cc04a;g.add(mesh(G.wheat,c,x,.33,z));g.add(mesh(G.wheatTop,ripe?0xd9a52e:0x77a83c,x,.6,z,false))})}
+ else if(id==='clover'){pos9.forEach(([x,z],i)=>{const m=mesh(G.clover,i%2?0x35a535:0x4cc044,x,.2,z);m.scale.y=.75;g.add(m);if(ripe&&i%2===0)g.add(mesh(G.flower,0xf2b8d8,x,.33,z,false))})}
+ else if(id==='corn'){pos4.forEach(([x,z])=>{g.add(mesh(G.stalk,0x5cb53c,x,.55,z));
+   const l1=mesh(G.leaf,0x4aa32e,x+.08,.5,z);l1.rotation.z=-.7;g.add(l1);const l2=mesh(G.leaf,0x4aa32e,x-.08,.7,z);l2.rotation.z=.7;g.add(l2);
+   if(ripe){const cb=mesh(G.cob,0xffd23a,x+.07,.62,z+.04);cb.rotation.z=-.35;g.add(cb);g.add(mesh(G.tassel,0xe0b64a,x,1.1,z,false))}})}
+ else if(id==='tomato')bushes(0x3f9f3a,0xe53935,true);
+ else if(id==='bean'){pos6.forEach(([x,z])=>{const b=mesh(G.smallBush,0x5dab3a,x,.22,z);b.scale.y=1.2;g.add(b);
    if(ripe){[-.1,.1].forEach(d=>{const p=mesh(G.pod,0x2e6b2a,x+d,.2,z+.13,false);p.rotation.z=.6*Math.sign(d);g.add(p)});g.add(mesh(G.flower,0xffffff,x,.42,z,false))}})}
  else if(id==='cane'){pos4.forEach(([x,z])=>{[[0,0],[.08,.06],[-.07,.05]].forEach(([a,b])=>{g.add(mesh(G.cane,ripe?0x8a4f6e:0x8fbf5a,x+a,.73,z+b))});
-   for(let i=0;i<3;i++){const l=mesh(G.caneLeaf,0x5f9e3a,x,1.3,z);l.geometry=G.caneLeaf;l.rotation.set(.9,i*2.1,0,'YXZ');g.add(l)}})}
+   for(let i=0;i<3;i++){const l=mesh(G.caneLeaf,0x5fae3a,x,1.3,z);l.rotation.set(.9,i*2.1,0,'YXZ');g.add(l)}})}
+ else if(id==='onion'){pos6.forEach(([x,z])=>{g.add(mesh(G.shoot,0x4caf50,x,.3,z,false));if(ripe)g.add(mesh(G.bulb,0xe8c9ef,x,.1,z,false))})}
+ else if(id==='potato'){pos6.forEach(([x,z])=>{g.add(mesh(G.smallBush,0x4e9f35,x,.2,z));if(ripe)g.add(mesh(G.bulb,0xc49a6c,x+.13,.07,z+.1,false))})}
+ else if(id==='cucumber'){pos4.forEach(([x,z])=>{const b=mesh(G.bush,0x58b03a,x,.16,z);b.scale.y=.5;g.add(b);
+   if(ripe){const p=mesh(G.pod,0x1f7a2a,x+.05,.1,z+.24,false);p.rotation.z=Math.PI/2;p.scale.set(1.8,1.5,1.8);g.add(p)}})}
+ else if(id==='eggplant')bushes(0x3f8f4a,0x5b1f8a,false);
+ else if(id==='pepper')bushes(0x3fa03a,0xfbc02d,false);
+ else if(id==='melon'){pos4.forEach(([x,z])=>{const b=mesh(G.smallBush,0x5cb83a,x,.08,z,false);b.scale.set(1.3,.4,1.3);g.add(b)});
+   if(ripe){g.add(mesh(G.melon,0x1f7a2a,-.18,.17,-.08));g.add(mesh(G.melon,0x2a8f34,.2,.17,.16))}}
+ else if(id==='grape')bushes(0x4fa83a,0x8e24aa,true);
+ else if(id==='orange')tree(0x2f9a36,0xff9800);
+ else if(id==='mango')tree(0x3a8f2e,0xffc107);
+ else if(id==='cotton')bushes(0x5a9a45,0xffffff,false);
+ else if(id==='dates'){g.add(mesh(G.cane,0x8a5a30,0,.65,0));for(let i=0;i<5;i++){const l=mesh(G.caneLeaf,0x3fae36,0,1.3,0);l.rotation.set(1.1,i*1.257,0,'YXZ');g.add(l)}
+   if(ripe)[[.1,1.2,.05],[-.08,1.18,.08],[.02,1.16,-.1]].forEach(([a,b,c])=>g.add(mesh(G.fruit,0xc62828,a,b,c,false)))}
+ else if(id==='rose')bushes(0x2f8f3a,0xe91e63,false);
+ else if(id==='berry'){pos6.forEach(([x,z])=>{g.add(mesh(G.smallBush,0x3fa53a,x,.18,z));if(ripe)g.add(mesh(G.fruit,0xe5202e,x+.13,.12,z+.1,false))})}
  if(!ripe)g.scale.set(1,k,1);
  return g}
 
@@ -235,41 +356,39 @@ function makeBar(){const g=new THREE.Group();
  const fg=new THREE.Mesh(new THREE.PlaneGeometry(.74,.07),new THREE.MeshBasicMaterial({color:0x9be15d,depthTest:false}));
  fg.geometry.translate(.37,0,0);fg.position.set(-.37,0,.001);bg.renderOrder=10;fg.renderOrder=11;g.add(bg);g.add(fg);g.userData.fg=fg;g.visible=false;return g}
 
-function plotPos(i){const n=S.size,off=(n-1)*STEP/2;return new THREE.Vector3((i%n)*STEP-off,0,Math.floor(i/n)*STEP-off)}
+function plotPos(i){const w=S.w;return new THREE.Vector3((i%w)*STEP-(w-1)*STEP/2,0,Math.floor(i/w)*STEP-(S.h-1)*STEP/2)}
 
 function buildField(){
  while(field.children.length)field.remove(field.children[0]);
- plotObjs=[];const n=S.size,L=n*STEP+.4;
- // earth bed under the plots
- field.add(mesh(new THREE.BoxGeometry(L,.06,L),0x8a6236,0,.03,0,false));
- // low mud-brick border
- const half=L/2+.15;
- [[0,-half,L+.6,.3],[0,half,L+.6,.3],[-half,0,.3,L],[half,0,.3,L]].forEach(([x,z,w,d])=>field.add(mesh(new THREE.BoxGeometry(w,.12,d),0xb98a52,x,.06,z,false)));
- // wooden fence on outer edge
- const fh=half+.55,posts=[];
- for(let t=-fh;t<=fh+.01;t+=STEP*.75){posts.push([t,-fh],[t,fh],[-fh,t],[fh,t])}
- const pg=new THREE.BoxGeometry(.1,.55,.1);posts.forEach(([x,z])=>{if(Math.abs(x)<.9&&z>0)return;field.add(mesh(pg,0x9c6b3a,x,.27,z))});
- [[0,-fh,2*fh,.06],[-fh,0,.06,2*fh],[fh,0,.06,2*fh]].forEach(([x,z,w,d])=>{field.add(mesh(new THREE.BoxGeometry(w,.07,d),0xb07a42,x,.4,z));field.add(mesh(new THREE.BoxGeometry(w,.07,d),0xb07a42,x,.2,z))});
- [[-(fh+.9)/2,fh],[(fh+.9)/2,fh]].forEach(([x,z])=>{const w=fh-.9;field.add(mesh(new THREE.BoxGeometry(w,.07,.06),0xb07a42,x,.4,z));field.add(mesh(new THREE.BoxGeometry(w,.07,.06),0xb07a42,x,.2,z))});
- // dirt path from the gate
- const path=mesh(new THREE.BoxGeometry(1.4,.02,4),0xc9a46a,0,.01,fh+2,false);field.add(path);
- for(let i=0;i<n*n;i++){
+ plotObjs=[];const w=S.w,h=S.h,Lx=w*STEP+.4,Lz=h*STEP+.4;
+ field.add(mesh(box(Lx,.06,Lz),0x7d4420,0,.03,0,false)); // earth bed
+ const bx=Lx/2+.15,bz=Lz/2+.15;
+ [[0,-bz,Lx+.6,.3],[0,bz,Lx+.6,.3],[-bx,0,.3,Lz],[bx,0,.3,Lz]].forEach(([x,z,ww,d])=>field.add(mesh(box(ww,.12,d),0x9a5a2c,x,.06,z,false)));
+ // white picket fence with a gate at the front
+ const fx=bx+.55,fz=bz+.55,pg=box(.1,.6,.1),WH=0xffffff,RL=0xf1f1f1;
+ const nx=Math.round(2*fx/(STEP*.75)),nz=Math.round(2*fz/(STEP*.75));
+ for(let k=0;k<=nx;k++){const x=-fx+2*fx*k/nx;field.add(mesh(pg,WH,x,.3,-fz));if(Math.abs(x)>=.9)field.add(mesh(pg,WH,x,.3,fz))}
+ for(let k=1;k<nz;k++){const z=-fz+2*fz*k/nz;field.add(mesh(pg,WH,-fx,.3,z));field.add(mesh(pg,WH,fx,.3,z))}
+ [.2,.42].forEach(y=>{field.add(mesh(box(2*fx,.07,.06),RL,0,y,-fz));field.add(mesh(box(.06,.07,2*fz),RL,-fx,y,0));field.add(mesh(box(.06,.07,2*fz),RL,fx,y,0));
+  [-1,1].forEach(s=>field.add(mesh(box(fx-.9,.07,.06),RL,s*(fx+.9)/2,y,fz)))});
+ field.add(mesh(box(1.4,.02,3),0xe6cf95,0,.012,fz+1.5,false)); // path from the gate
+ for(let i=0;i<w*h;i++){
   const g=new THREE.Group();g.position.copy(plotPos(i));g.userData.i=i;
   const soil=new THREE.Mesh(G.soil,new THREE.MeshLambertMaterial({color:SOIL_DRY,flatShading:true}));soil.position.y=.08;soil.receiveShadow=true;soil.castShadow=true;soil.userData.i=i;g.add(soil);
   const fm=new THREE.MeshLambertMaterial({color:FURROW_DRY,flatShading:true});
   [-.3,0,.3].forEach(z=>{const f=new THREE.Mesh(G.furrow,fm);f.position.set(0,.19,z);f.receiveShadow=true;f.userData.i=i;g.add(f)});
-  const coin=new THREE.Mesh(G.coin,new THREE.MeshLambertMaterial({color:0xffc93c,emissive:0x664400}));coin.rotation.x=Math.PI/2;coin.position.y=1.45;coin.visible=false;coin.castShadow=true;g.add(coin);
+  const coin=new THREE.Mesh(G.coin,new THREE.MeshLambertMaterial({color:0xffc93c,emissive:0x664400}));coin.rotation.x=Math.PI/2;coin.position.y=1.5;coin.visible=false;g.add(coin);
   const bar=makeBar();bar.position.y=1.05;g.add(bar);
   field.add(g);plotObjs.push({g,soil,fm,coin,bar,crop:null,key:'',sel:false});
  }
- fitCamera();
+ layoutDecor(fx,fz);fitCamera();
 }
 
 /* ---- Camera framing (fits the field in the space between the HUD panels) ---- */
 function fitCamera(){
  const W=app.clientWidth,H=app.clientHeight;renderer.setSize(W,H,false);
- const t=$('hudTop').offsetHeight+16,b=$('hudBot').offsetHeight+22;$('hint').style.bottom=(b-14)+'px';
- const L=S.size*STEP+1.6, hw=L*.72+.3, hh=L*.42+.7;
+ const t=$('hudTop').offsetHeight+16,b=$('hudBot').offsetHeight+22;$('hint').style.bottom=(b-14)+'px';$('toast').style.top=(t+4)+'px';
+ const L=(S.w+S.h)/2*STEP+1.6, hw=L*.72+.3, hh=L*.42+.9;
  const mid=Math.max(120,H-t-b);
  const upp=Math.max(2*hh/mid,2*hw/W)/zoom;
  cam.left=-W/2*upp;cam.right=W/2*upp;cam.top=(mid/2+t)*upp;cam.bottom=-(mid/2+b)*upp;
@@ -279,29 +398,37 @@ function placeCam(){cam.position.copy(target).add(CAM_OFF);cam.lookAt(target)}
 /* ---- Input: tap to plant/harvest, drag to pan, pinch/wheel to zoom ---- */
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
 const ptrs=new Map();let drag=null,pinch0=0,zoom0=1,moved=false;
-cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+cv.addEventListener('pointerdown',e=>{try{cv.setPointerCapture(e.pointerId)}catch(_){}ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
  if(ptrs.size===1){drag={x:e.clientX,y:e.clientY,t:target.clone()};moved=false}
- if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0=Math.hypot(a.x-b.x,a.y-b.y);zoom0=zoom;moved=true}});
+ if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0=Math.hypot(a.x-b.x,a.y-b.y)||1;zoom0=zoom;moved=true}});
 cv.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
- if(ptrs.size===2){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);zoom=Math.min(1.8,Math.max(.6,zoom0*d/pinch0));fitCamera();return}
+ if(ptrs.size===2){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);zoom=Math.min(2.2,Math.max(.5,zoom0*d/pinch0));fitCamera();return}
  if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>8)moved=true;if(!moved)return;
  const u=cam.userData.upp,r=new THREE.Vector3(1,0,-1).normalize(),f=new THREE.Vector3(-1,0,-1).normalize();
  target.copy(drag.t).addScaledVector(r,-dx*u).addScaledVector(f,dy*u/0.68);
- target.x=Math.max(-7,Math.min(7,target.x));target.z=Math.max(-7,Math.min(7,target.z));placeCam()});
+ target.x=Math.max(-12,Math.min(12,target.x));target.z=Math.max(-14,Math.min(10,target.z));placeCam()});
 function up(e){const had=ptrs.has(e.pointerId);ptrs.delete(e.pointerId);if(!had)return;
  if(ptrs.size===0){if(!moved)pick(e.clientX,e.clientY);drag=null}else{drag=null;moved=true}}
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
-cv.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.min(1.8,Math.max(.6,zoom*(e.deltaY<0?1.1:.9)));fitCamera()},{passive:false});
+cv.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.min(2.2,Math.max(.5,zoom*(e.deltaY<0?1.1:.9)));fitCamera()},{passive:false});
 function pick(x,y){const r=cv.getBoundingClientRect();ndc.set((x-r.left)/r.width*2-1,-(y-r.top)/r.height*2+1);
  ray.setFromCamera(ndc,cam);const hits=ray.intersectObjects(field.children,true);
  for(const h of hits){let o=h.object;while(o&&o.userData.i===undefined)o=o.parent;if(o){tap(o.userData.i,x-r.left,y-r.top);return}}}
 
 /* ================= GAME LOGIC ================= */
-function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>el.classList.remove('show'),1600)}
+function toast(t,ms){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>el.classList.remove('show'),ms||1600)}
 function pop(txt,x,y){const p=document.createElement('div');p.className='pop';p.textContent=txt;p.style.left=x+'px';p.style.top=y+'px';app.appendChild(p);setTimeout(()=>p.remove(),1000)}
 function screenOf(i){const v=plotPos(i);v.y=.6;v.project(cam);return{x:(v.x+1)/2*app.clientWidth,y:(1-v.y)/2*app.clientHeight}}
-function newMission(){const ok=CROPS.filter(c=>c.lv<=S.lv);const c=ok[Math.floor(Math.random()*ok.length)];const n=3+S.lv;S.mission={crop:c.id,n,done:0,reward:Math.round(n*c.sell*1.5)}}
-function addXp(a){S.xp+=a;while(S.xp>=need(S.lv)){S.xp-=need(S.lv);S.lv++;toast('🎉 مستوى '+S.lv+'! محاصيل جديدة اتفتحت')}}
+function newMission(){const ok=CROPS.filter(c=>c.lv<=S.lv);const c=ok[Math.floor(Math.random()*ok.length)];const n=Math.min(3+S.lv,20);S.mission={crop:c.id,n,done:0,reward:Math.round(n*c.sell*1.5)}}
+function addXp(a){S.xp+=a;let from=S.lv,bonus=0;
+ while(S.lv<MAXLV&&S.xp>=need(S.lv)){S.xp-=need(S.lv);S.lv++;bonus+=S.lv*25}
+ if(S.lv>=MAXLV)S.xp=Math.min(S.xp,need(MAXLV));
+ if(S.lv>from){S.coins+=bonus;const grew=ensureLand();if(grew)landDirty=true;
+  const nc=CROPS.filter(c=>c.lv>from&&c.lv<=S.lv).map(c=>c.n+' '+c.e).join('، ');
+  $('luA').textContent='مبروك! مستوى '+S.lv;$('luB').textContent=titleOf(S.lv);
+  $('luC').innerHTML=(grew?'🌾 الأرض كبرت وبقت '+S.w+'×'+S.h+'<br>':'')+(nc?'🆕 محصول جديد: '+nc+'<br>':'')+'🎁 هدية: '+bonus+' 🪙';
+  $('lvlup').classList.add('show');clearTimeout(addXp.h);addXp.h=setTimeout(()=>$('lvlup').classList.remove('show'),4500)}}
+$('lvlup').onclick=()=>$('lvlup').classList.remove('show');
 function stage(p){if(!p)return null;const c=C[p.c];const el=(Date.now()-p.t)/1000;return{c,pr:Math.min(1,el/c.t),left:Math.max(0,Math.ceil(c.t-el))}}
 function syncPlots(){
  plotObjs.forEach((o,i)=>{const p=S.plots[i],s=stage(p);
@@ -311,26 +438,29 @@ function syncPlots(){
    o.soil.material.color.setHex(p?SOIL_WET:SOIL_DRY);o.fm.color.setHex(p?FURROW_WET:FURROW_DRY);
    o.coin.visible=st===2;if(st===2&&o.crop){o.crop.scale.set(.2,.2,.2);o.grow=0}}
   o.bar.visible=!!s&&s.pr<1;if(o.bar.visible)o.bar.userData.fg.scale.x=Math.max(.02,s.pr)})}
-function renderTop(){$('coins').textContent=S.coins;$('lvl').textContent=S.lv;$('xpbar').style.width=(S.xp/need(S.lv)*100)+'%';
- const cost=expandCost();$('expand').textContent=S.size>=8?'الأرض كاملة ✅':'🚜 وسّع الأرض ('+cost+'🪙)';
- const m=S.mission;if(m){const c=C[m.crop];$('msg').innerHTML='طلب الحاج حمادة: احصد <b>'+m.n+' '+c.n+' '+c.e+'</b> ('+Math.min(m.done,m.n)+'/'+m.n+') والجايزة <b>'+m.reward+'🪙</b>';$('claim').className=m.done>=m.n?'on':''}}
+function renderTop(){$('coins').textContent=S.coins;$('lvl').textContent=S.lv;$('xpbar').style.width=(S.lv>=MAXLV?100:S.xp/need(S.lv)*100)+'%';
+ $('info').textContent='🏅 '+titleOf(S.lv)+' · 🌾 الأرض '+S.w+'×'+S.h+(S.lv<LAND_LV?' · هتكبر في مستوى '+(S.lv+1):S.lv>=MAXLV?' · أعلى مستوى 👑':' · أقصى مساحة ✅');
+ const m=S.mission;if(m){const c=C[m.crop];$('msg').innerHTML='طلب الحاج حمادة: احصد <b>'+m.n+' '+c.n+' '+c.e+'</b> ('+Math.min(m.done,m.n)+'/'+m.n+') والجايزة <b>'+m.reward+'🪙</b>';$('claim').className='gbtn'+(m.done>=m.n?' on':'')}}
 function renderSeeds(){const b=$('seeds');b.innerHTML='';
  CROPS.forEach(c=>{const d=document.createElement('div');const lock=c.lv>S.lv;d.className='seed'+(S.sel===c.id?' sel':'')+(lock?' lock':'');d.tabIndex=0;
-  d.innerHTML='<span class="e">'+(lock?'🔒':c.e)+'</span>'+c.n+'<br>'+(lock?'مستوى '+c.lv:c.cost+'🪙 · '+c.t+'ث');
+  d.innerHTML='<span class="e">'+(lock?'🔒':c.e)+'</span>'+c.n+'<br>'+(lock?'مستوى '+c.lv:c.cost+'🪙 · '+ft(c.t));
   d.onclick=()=>{if(lock){toast('بتتفتح في مستوى '+c.lv);return}S.sel=c.id;save();renderSeeds()};b.appendChild(d)})}
-function expandCost(){return 120*Math.pow(S.size-3,2)}
-function tap(i,x,y){const p=S.plots[i];const o=plotObjs[i];o.bounce=1;
+function leftTxt(s){return s.left<60?s.left+' ثانية':Math.ceil(s.left/60)+' دقيقة'}
+function tap(i,x,y){const p=S.plots[i];const o=plotObjs[i];if(!o)return;o.bounce=1;
  if(!p){const c=C[S.sel];if(c.lv>S.lv)return toast('لسه مفتحتش');if(S.coins<c.cost)return toast('الفلوس مش كفاية 🪙');
   S.coins-=c.cost;S.plots[i]={c:c.id,t:Date.now()};pop('-'+c.cost+'🪙',x,y-20)}
- else{const s=stage(p);if(s.pr<1)return toast('باقي '+s.left+' ثانية '+s.c.e);harvest(i,{x,y})}
+ else{const s=stage(p);if(s.pr<1)return toast('باقي '+leftTxt(s)+' '+s.c.e);harvest(i,{x,y})}
  after()}
-function harvest(i,r){const p=S.plots[i];const c=C[p.c];S.plots[i]=null;S.coins+=c.sell;addXp(Math.max(1,Math.round(c.sell/3)));
- if(S.mission&&S.mission.crop===c.id)S.mission.done++;const q=r||screenOf(i);pop('+'+c.sell+'🪙',q.x,q.y-20)}
-function after(){save();syncPlots();renderTop();renderSeeds()}
-$('harvestAll').onclick=()=>{let n=0;for(let i=0;i<S.plots.length;i++){const p=S.plots[i];if(p&&stage(p).pr>=1){harvest(i,null);n++}}toast(n?'اتحصد '+n+' محصول 🧺':'مفيش حاجة جاهزة لسه');after()};
-$('expand').onclick=()=>{if(S.size>=8)return;const c=expandCost();if(S.coins<c)return toast('محتاج '+c+' 🪙');S.coins-=c;const o=S.size,n=o+1,np=Array(n*n).fill(null);
- for(let y=0;y<o;y++)for(let x=0;x<o;x++)np[y*n+x]=S.plots[y*o+x];S.plots=np;S.size=n;buildField();toast('الأرض كبرت! 🌾');after()};
-$('claim').onclick=()=>{const m=S.mission;if(m&&m.done>=m.n){S.coins+=m.reward;addXp(m.n*3);toast('تسلم إيدك! +'+m.reward+'🪙');newMission();after()}};
+function harvest(i,r,quiet){const p=S.plots[i];const c=C[p.c];const q=quiet?null:(r||screenOf(i));S.plots[i]=null;S.coins+=c.sell;addXp(Math.max(1,Math.round(c.sell/3)));
+ if(S.mission&&S.mission.crop===c.id)S.mission.done++;if(q)pop('+'+c.sell+'🪙',q.x,q.y-20)}
+function after(){if(landDirty){landDirty=false;buildField()}save();syncPlots();renderTop();renderSeeds()}
+$('harvestAll').onclick=()=>{let n=0,sum=0;const len=S.plots.length;for(let i=0;i<len;i++){const p=S.plots[i];if(p&&stage(p).pr>=1){sum+=C[p.c].sell;harvest(i,null,n>=10);n++}}
+ toast(n?'اتحصد '+n+' محصول 🧺 +'+sum+'🪙':'مفيش حاجة جاهزة لسه');after()};
+$('plantAll').onclick=()=>{const c=C[S.sel];if(c.lv>S.lv)return toast('لسه مفتحتش');let n=0;const now=Date.now();
+ for(let i=0;i<S.plots.length&&S.coins>=c.cost;i++){if(!S.plots[i]){S.coins-=c.cost;S.plots[i]={c:c.id,t:now};n++}}
+ toast(n?'اتزرع '+n+' '+c.n+' '+c.e:(S.plots.some(p=>!p)?'الفلوس مش كفاية 🪙':'مفيش أرض فاضية'));after()};
+$('claim').onclick=()=>{const m=S.mission;if(m&&m.done>=m.n){S.coins+=m.reward;toast('تسلم إيدك! +'+m.reward+'🪙');addXp(m.n*3);newMission();after()}};
+$('play').onclick=()=>{$('splash').classList.add('hide');setTimeout(()=>{$('hint').style.transition='opacity 1s';$('hint').style.opacity=0},6000)};
 
 /* ================= LOOP ================= */
 const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -339,20 +469,22 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;acc+=dt;
  if(acc>.4){acc=0;syncPlots()}
  const t=now/1000;
  plotObjs.forEach((o,i)=>{
-  if(o.coin.visible){o.coin.rotation.z=t*3;o.coin.position.y=1.45+Math.sin(t*3+i)*.08}
+  if(o.coin.visible){o.coin.rotation.z=t*3;o.coin.position.y=1.5+Math.sin(t*3+i)*.08}
   if(o.crop&&o.grow!==undefined&&o.grow<1){o.grow=Math.min(1,o.grow+dt*3);const s=.2+.8*(1-Math.pow(1-o.grow,3))+Math.sin(o.grow*Math.PI)*.15;o.crop.scale.set(s,s,s)}
   if(o.crop&&o.key.endsWith('2')&&!reduce)o.crop.rotation.z=Math.sin(t*1.6+i*.7)*.03;
   if(o.bounce){o.bounce=Math.max(0,o.bounce-dt*4);const s=1+Math.sin(o.bounce*Math.PI)*.08;o.g.scale.set(s,1,s)}
   if(o.bar.visible)o.bar.quaternion.copy(cam.quaternion)});
- if(!reduce){wheel.userData.wheel.rotation.z+=dt*.8;buff.position.y=Math.abs(Math.sin(t*1.2))*.02;
-  clouds.forEach((c,k)=>{c.position.x+=dt*(.25+k*.08);if(c.position.x>18)c.position.x=-18});
-  canalWater.material.color.setHSL(.55,.62,.6+Math.sin(t*1.5)*.02)}
+ if(!reduce){D.wheel.userData.wheel.rotation.z+=dt*.8;D.buff.position.y=Math.abs(Math.sin(t*1.2))*.02;
+  D.pen.userData.chickens.forEach((c,k)=>{c.position.y=Math.abs(Math.sin(t*3+k*1.7))*.05;c.rotation.y+=Math.sin(t*.7+k)*dt*.6});
+  clouds.forEach((c,k)=>{c.position.x+=dt*(.25+k*.08);if(c.position.x>20)c.position.x=-20});
+  D.canal.userData.water.material.color.setHSL(.56,.82,.54+Math.sin(t*1.5)*.02)}
  renderer.render(scene,cam);requestAnimationFrame(loop)}
 
-if(!S.mission)newMission();
-renderTop();renderSeeds();buildField();syncPlots();
+if(!S.mission||!C[S.mission.crop])newMission();
+renderTop();renderSeeds();buildField();syncPlots();save();
 window.addEventListener('resize',fitCamera);
 if(window.ResizeObserver)new ResizeObserver(fitCamera).observe(app);
-setTimeout(()=>{$('hint').style.transition='opacity 1s';$('hint').style.opacity=0},6000);
 requestAnimationFrame(loop);
 </script>
+</body>
+</html>
